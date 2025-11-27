@@ -1,0 +1,6 @@
+.popup-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:999 }
+.popup-card{ background:#fff; width:640px; max-width:92%; padding:28px; border-radius:8px; position:relative; text-align:center }
+.popup-close{ position:absolute; right:14px; top:10px; border:none; background:none; font-size:24px; cursor:pointer }
+.popup-image-wrap img{ width:360px; height:360px; object-fit:cover; border-radius:8px }
+.popup-actions{ margin-top:18px; display:flex; gap:30px; justify-content:center }
+.popup-actions button{ border:none; background:none; cursor:pointer }
