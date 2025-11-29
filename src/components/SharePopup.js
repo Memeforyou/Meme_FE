@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaRegHeart, FaShareAlt, FaDownload } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaFacebookF, FaTwitter, FaWhatsapp } from 'react-icons/fa';
+import { MdSaveAlt } from 'react-icons/md';
+import { BiShareAlt } from 'react-icons/bi';
+import kakaoIcon from '../assets/kakao-icon.png';
 import './SharePopup.css';
 
 const API_BASE_URL = 'https://memeforyou-server-production.up.railway.app';
@@ -185,6 +188,64 @@ export default function SharePopup({ meme, onClose, onLikeUpdate }) {
     }
   };
 
+  // Share handlers
+  const [shareOpen, setShareOpen] = useState(false);
+
+  const shareUrl = () => {
+    // prefer cloud_url from detail, fall back to meme.src or current page
+    return (memeDetail && memeDetail.cloud_url) || meme?.src || window.location.href;
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl());
+      alert('링크가 복사되었습니다.');
+      setShareOpen(false);
+    } catch (err) {
+      console.error('복사 실패:', err);
+      alert('링크 복사에 실패했습니다.');
+    }
+  };
+
+  const handleSystemShare = async () => {
+    const url = shareUrl();
+    try {
+      if (navigator.share) {
+        await navigator.share({ url });
+      } else {
+        // fallback to copy
+        await navigator.clipboard.writeText(url);
+        alert('공유 지원이 없는 환경입니다. 링크가 복사되었습니다.');
+      }
+      setShareOpen(false);
+    } catch (err) {
+      console.error('System share failed', err);
+    }
+  };
+
+  const handleKakaoShare = () => {
+    // 카카오톡 공유는 시스템 공유로 대체
+    handleSystemShare();
+  };
+
+  const handleWhatsAppShare = () => {
+    const url = shareUrl();
+    window.open(`https://wa.me/?text=${encodeURIComponent(url)}`, '_blank', 'noopener');
+    setShareOpen(false);
+  };
+
+  const handleFacebookShare = () => {
+    const url = shareUrl();
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'noopener');
+    setShareOpen(false);
+  };
+
+  const handleTwitterShare = () => {
+    const url = shareUrl();
+    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank', 'noopener');
+    setShareOpen(false);
+  };
+
   if (!meme) return null;
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -207,8 +268,58 @@ export default function SharePopup({ meme, onClose, onLikeUpdate }) {
             )}
             <span>{likeCount}</span>
           </button>
-          <button><FaShareAlt size={20} /></button>
-          <button onClick={handleDownload}><FaDownload size={20} /></button>
+
+          <div className="share-wrapper">
+            <button onClick={() => setShareOpen((s) => !s)} aria-haspopup="menu" aria-expanded={shareOpen} title="공유">
+              <BiShareAlt size={20} />
+            </button>
+            {shareOpen && (
+              <div className="share-modal-overlay" onClick={() => setShareOpen(false)}>
+                <div className="share-modal" onClick={(e) => e.stopPropagation()}>
+                  <h3 onClick={() => setShareOpen(false)}>공유</h3>
+                  <div className="share-content">
+                    {/* 앱 아이콘 섹션 */}
+                    <div className="share-icons">
+                      <button className="share-icon-btn" onClick={handleKakaoShare} title="카카오톡">
+                        <div className="icon-circle kakao">
+                          <img src={kakaoIcon} alt="Kakao" />
+                        </div>
+                        <span>앱으로 공유</span>
+                      </button>
+                      <button className="share-icon-btn" onClick={handleWhatsAppShare} title="WhatsApp">
+                        <div className="icon-circle whatsapp"><FaWhatsapp /></div>
+                        <span>WhatsApp</span>
+                      </button>
+                      <button className="share-icon-btn" onClick={handleFacebookShare} title="Facebook">
+                        <div className="icon-circle facebook"><FaFacebookF /></div>
+                        <span>Facebook</span>
+                      </button>
+                      <button className="share-icon-btn" onClick={handleTwitterShare} title="X">
+                        <div className="icon-circle twitter"><FaTwitter /></div>
+                        <span>X</span>
+                      </button>
+                    </div>
+
+                    {/* 링크 복사 섹션 */}
+                    <div className="share-link-section">
+                      <input 
+                        type="text" 
+                        readOnly 
+                        value={shareUrl()} 
+                        className="share-link-input"
+                        onClick={(e) => e.target.select()}
+                      />
+                      <button className="share-copy-btn" onClick={handleCopyLink}>
+                        복사
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <button onClick={handleDownload}><MdSaveAlt size={24} /></button>
         </div>
       </div>
     </div>
