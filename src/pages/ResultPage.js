@@ -145,7 +145,14 @@ export default function ResultPage() {
 
       <div className="result-grid">
         {loading ? (
-          <div className="no-result">검색 중...</div>
+          // Skeleton UI - 로딩 중일 때 빈 박스들 표시
+          <>
+            {[...Array(9)].map((_, i) => (
+              <div key={i} className="skeleton-item">
+                <div className="skeleton-box"></div>
+              </div>
+            ))}
+          </>
         ) : error ? (
           <div className="no-result">{error}</div>
         ) : memes.length === 0 ? (
