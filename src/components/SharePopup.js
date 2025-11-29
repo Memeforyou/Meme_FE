@@ -262,16 +262,16 @@ export default function SharePopup({ meme, onClose, onLikeUpdate }) {
         <div className="popup-actions">
           <button onClick={handleLike} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {isLiked ? (
-              <FaHeart size={20} color="#ff0000" />
+              <FaHeart size={28} color="#ff0000" />
             ) : (
-              <FaRegHeart size={20} />
+              <FaRegHeart size={28} />
             )}
             <span>{likeCount}</span>
           </button>
 
           <div className="share-wrapper">
             <button onClick={() => setShareOpen((s) => !s)} aria-haspopup="menu" aria-expanded={shareOpen} title="공유">
-              <BiShareAlt size={20} />
+              <BiShareAlt size={28} />
             </button>
             {shareOpen && (
               <div className="share-modal-overlay" onClick={() => setShareOpen(false)}>
@@ -319,7 +319,7 @@ export default function SharePopup({ meme, onClose, onLikeUpdate }) {
             )}
           </div>
 
-          <button onClick={handleDownload}><MdSaveAlt size={24} /></button>
+          <button onClick={handleDownload}><MdSaveAlt size={28} /></button>
         </div>
       </div>
     </div>
