@@ -41,29 +41,61 @@
 .result-grid{
 	max-width:1100px;
 	margin:18px auto;
-	display:grid;
-	grid-template-columns: repeat(3, 1fr);
+	display:flex;
 	gap:18px;
-	grid-auto-rows: auto; /* auto height for each row */
+}
+
+.result-column{
+	flex:1;
+	display:flex;
+	flex-direction:column;
+	gap:18px;
 }
 .result-item{
 	width:100%;
 	display:block;
-	break-inside: avoid; /* prevent breaking inside items */
 }
 .result-item img{
 	width:100%;
 	height:auto; /* keep original aspect ratio */
-	object-fit:cover;
 	border-radius:12px;
 	cursor:pointer;
 	display:block;
 }
 
 @media (max-width: 900px) {
-	.result-grid { grid-template-columns: repeat(2, 1fr); }
+	/* 2 columns for tablet - need to update JS logic */
 }
 @media (max-width: 600px) {
-	.result-grid { grid-template-columns: repeat(1, 1fr); }
+	/* 1 column for mobile - need to update JS logic */
 }
-.no-result{ text-align:center; padding:120px 0; font-size:20px }
+.no-result{ 
+	width:100%; /* span all columns */
+	text-align:center; 
+	padding:120px 0; 
+	font-size:20px;
+}
+
+/* Skeleton Loading Animation */
+.skeleton-item {
+	width: 100%;
+	display: block;
+}
+
+.skeleton-box {
+	width: 100%;
+	height: 250px;
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: skeleton-loading 1.5s infinite;
+	border-radius: 12px;
+}
+
+@keyframes skeleton-loading {
+	0% {
+		background-position: 200% 0;
+	}
+	100% {
+		background-position: -200% 0;
+	}
+}

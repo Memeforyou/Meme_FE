@@ -145,14 +145,32 @@ export default function ResultPage() {
 
       <div className="result-grid">
         {loading ? (
-          <div className="no-result">검색 중...</div>
+          // Skeleton UI - 로딩 중일 때 빈 박스들 표시
+          <>
+            {[1, 2, 3].map(columnIndex => (
+              <div key={columnIndex} className="result-column">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="skeleton-item">
+                    <div className="skeleton-box"></div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </>
         ) : error ? (
           <div className="no-result">{error}</div>
         ) : memes.length === 0 ? (
           <div className="no-result">검색 결과가 없습니다.</div>
         ) : (
-          sorted.map((m) => (
-            <MemeItem key={m.id} meme={m} onClick={(mm) => setSelected(mm)} />
+          // Create 3 columns and distribute items in row-first order
+          [0, 1, 2].map(columnIndex => (
+            <div key={columnIndex} className="result-column">
+              {sorted
+                .filter((_, index) => index % 3 === columnIndex)
+                .map((m) => (
+                  <MemeItem key={m.id} meme={m} onClick={(mm) => setSelected(mm)} />
+                ))}
+            </div>
           ))
         )}
       </div>
