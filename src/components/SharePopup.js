@@ -253,7 +253,7 @@ export default function SharePopup({ meme, onClose, onLikeUpdate }) {
         <button className="popup-close" onClick={onClose}>✕</button>
         <h2>
           {memeDetail && memeDetail.tags && memeDetail.tags.length > 0
-            ? memeDetail.tags.join(' ')
+            ? memeDetail.tags.map(tag => `#${tag}`).join(' ')
             : ' '}
         </h2>
         <div className="popup-image-wrap">
