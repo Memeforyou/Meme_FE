@@ -38,7 +38,7 @@ export default function ResultPage() {
         // Always use 'accuracy' sort for API call
         const params = new URLSearchParams({
           query: q,
-          page: '3',
+          page: '1',
           size: '20',
           sort: 'accuracy'
         });
